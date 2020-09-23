@@ -1,4 +1,6 @@
-import memory from './memory';
+const Memory = require('./memory');
+
+const memory = new Memory();
 
 class Array {
     constructor() {
@@ -65,3 +67,36 @@ class Array {
     }
 }
 Array.SIZE_RATIO = 3;
+
+function main() {
+    Array.SIZE_RATIO = 3;
+
+    let arr = new Array();
+
+    arr.push(3); // length=1, capacity=3, ptr=0
+    arr.push(5); // length=2, capacity=3, ptr=0
+    arr.push(15); // length=3, capacity=3, ptr=0 -- doesn't resize even though length = capacity?!
+    arr.push(19); // length=4, capacity=12, ptr=3
+    arr.push(45); // length=5, capacity=12, ptr=3
+    arr.push(10); // length=6, capacity=12, ptr=3
+    
+    arr.pop(); // length=5, capacity=12, ptr=3
+    arr.pop(); // length=4, capacity=12, ptr=3
+    arr.pop(); // length=3, capacity=12, ptr=3 -- doesn't resize, just redefines length
+
+    console.log(arr.get(0)); // 3
+
+    arr.remove(0); // copies 5 and 13 to new spots
+    console.log(arr);
+    arr.remove(0); // copies 5 to new spot
+    console.log(arr);
+    arr.pop(); // pop to reduce length to 0
+    
+    arr._resize(1); // length=1, capacity=1, ptr=15
+
+    arr.push("tauhida"); // length=1, capacity=1, ptr=15 -- won't work properly since the array is only taking numbers at the moment
+    console.log(arr.get(0)); // NaN
+    console.log(arr); // length=1, capacity=1, ptr=15 
+}
+
+main();
